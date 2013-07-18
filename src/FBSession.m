@@ -292,22 +292,6 @@ static FBSession *g_activeSession = nil;
     return self.accessTokenData.refreshDate;
 }
 
-- (NSString *)accessToken {
-    return self.accessTokenData.accessToken;
-}
-
-- (NSDate *)expirationDate {
-    return self.accessTokenData.expirationDate;
-}
-
-- (FBSessionLoginType) loginType {
-    if (self.accessTokenData) {
-        return self.accessTokenData.loginType;
-    } else {
-        return FBSessionLoginTypeNone;
-    }
-}
-
 #pragma mark - Public Members
 
 - (void)openWithCompletionHandler:(FBSessionStateHandler)handler {
@@ -364,29 +348,29 @@ static FBSession *g_activeSession = nil;
     }
 }
 
-- (void)reauthorizeWithPermissions:(NSArray*)permissions
-                          behavior:(FBSessionLoginBehavior)behavior
-                 completionHandler:(FBSessionReauthorizeResultHandler)handler {
-    [self reauthorizeWithPermissions:permissions
-                              isRead:NO
-                            behavior:behavior
-                     defaultAudience:FBSessionDefaultAudienceNone
-                   completionHandler:handler];
-}
-
-- (void)reauthorizeWithReadPermissions:(NSArray*)readPermissions
-                     completionHandler:(FBSessionReauthorizeResultHandler)handler {
-    [self requestNewReadPermissions:readPermissions
-                  completionHandler:handler];
-}
-
-- (void)reauthorizeWithPublishPermissions:(NSArray*)writePermissions
-                        defaultAudience:(FBSessionDefaultAudience)audience
-                      completionHandler:(FBSessionReauthorizeResultHandler)handler {
-    [self requestNewPublishPermissions:writePermissions
-                       defaultAudience:audience
-                     completionHandler:handler];
-}
+//- (void)reauthorizeWithPermissions:(NSArray*)permissions
+//                          behavior:(FBSessionLoginBehavior)behavior
+//                 completionHandler:(FBSessionReauthorizeResultHandler)handler {
+//    [self reauthorizeWithPermissions:permissions
+//                              isRead:NO
+//                            behavior:behavior
+//                     defaultAudience:FBSessionDefaultAudienceNone
+//                   completionHandler:handler];
+//}
+//
+//- (void)reauthorizeWithReadPermissions:(NSArray*)readPermissions
+//                     completionHandler:(FBSessionReauthorizeResultHandler)handler {
+//    [self requestNewReadPermissions:readPermissions
+//                  completionHandler:handler];
+//}
+//
+//- (void)reauthorizeWithPublishPermissions:(NSArray*)writePermissions
+//                        defaultAudience:(FBSessionDefaultAudience)audience
+//                      completionHandler:(FBSessionReauthorizeResultHandler)handler {
+//    [self requestNewPublishPermissions:writePermissions
+//                       defaultAudience:audience
+//                     completionHandler:handler];
+//}
 
 - (void)requestNewReadPermissions:(NSArray*)readPermissions
                 completionHandler:(FBSessionRequestPermissionResultHandler)handler {
@@ -610,25 +594,25 @@ static FBSession *g_activeSession = nil;
     return session;
 }
 
-+ (void)setDefaultAppID:(NSString*)appID {
-    [FBSettings setDefaultAppID:appID];
-}
-
-+ (NSString*)defaultAppID {
-    return [FBSettings defaultAppID];
-}
-
-+ (void)setDefaultUrlSchemeSuffix:(NSString*)urlSchemeSuffix {
-    [FBSettings setDefaultUrlSchemeSuffix:urlSchemeSuffix];
-}
-
-+ (NSString*)defaultUrlSchemeSuffix {
-    return [FBSettings defaultUrlSchemeSuffix];
-}
-
-+ (void)renewSystemCredentials:(FBSessionRenewSystemCredentialsHandler) handler {
-    [[FBSystemAccountStoreAdapter sharedInstance] renewSystemAuthorization:handler];
-}
+//+ (void)setDefaultAppID:(NSString*)appID {
+//    [FBSettings setDefaultAppID:appID];
+//}
+//
+//+ (NSString*)defaultAppID {
+//    return [FBSettings defaultAppID];
+//}
+//
+//+ (void)setDefaultUrlSchemeSuffix:(NSString*)urlSchemeSuffix {
+//    [FBSettings setDefaultUrlSchemeSuffix:urlSchemeSuffix];
+//}
+//
+//+ (NSString*)defaultUrlSchemeSuffix {
+//    return [FBSettings defaultUrlSchemeSuffix];
+//}
+//
+//+ (void)renewSystemCredentials:(FBSessionRenewSystemCredentialsHandler) handler {
+//    [[FBSystemAccountStoreAdapter sharedInstance] renewSystemAuthorization:handler];
+//}
 
 #pragma mark -
 #pragma mark Private Members (core session members)
@@ -1158,15 +1142,15 @@ static FBSession *g_activeSession = nil;
     params.permissions = permissions;
     params.writePrivacy = defaultAudience;
     
-    FBAppCall *call = [FBDialogs presentLoginDialogWithParams:params
+    FBAppCall *callOuter = [FBDialogs presentLoginDialogWithParams:params
                                                     clientState:nil
                                                         handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
                                                             [self handleDidCompleteNativeLoginForAppCall:call];
                                                         }];
-    if (call) {
+    if (callOuter) {
         _loginTypeOfPendingOpenUrlCallback = FBSessionLoginTypeFacebookApplication;
     }
-    return (call != nil);
+    return (callOuter != nil);
 }
 
 - (void)handleDidCompleteNativeLoginForAppCall:(FBAppCall *)call {
@@ -1423,23 +1407,23 @@ static FBSession *g_activeSession = nil;
         }
     } copy] autorelease];
     
-    FBRequestConnection *connection = [[[FBRequestConnection alloc] init] autorelease];
-    [connection addRequest:requestSessionMe
+    FBRequestConnection *conn = [[[FBRequestConnection alloc] init] autorelease];
+    [conn addRequest:requestSessionMe
          completionHandler:^(FBRequestConnection *connection, id<FBGraphUser> user, NSError *error) {
              handleBatch(user, nil);
          }];
     
-    [connection addRequest:requestNewTokenMe
+    [conn addRequest:requestNewTokenMe
          completionHandler:^(FBRequestConnection *connection, id<FBGraphUser> user, NSError *error) {
              handleBatch(user, nil);
          }];
     
-    [connection addRequest:requestPermissions
+    [conn addRequest:requestPermissions
          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
              handleBatch(nil, [result objectForKey:@"data"]);
          }];
     
-    [connection start];
+    [conn start];
 }
 
 - (void)reauthorizeWithPermissions:(NSArray*)permissions
@@ -1606,7 +1590,7 @@ static FBSession *g_activeSession = nil;
 
 // helper to wrap-up handler callback and state-change
 - (void)transitionAndCallHandlerWithState:(FBSessionState)status
-                                    error:(NSError*)error
+                                    error:(NSError*)errorParam
                                     token:(NSString*)token
                            expirationDate:(NSDate*)date
                               shouldCache:(BOOL)shouldCache
@@ -1644,7 +1628,7 @@ static FBSession *g_activeSession = nil;
             // unsuccessful transitions don't change state and don't propagate the error object
             handler(self,
                     self.state,
-                    didTransition ? error : nil);
+                    didTransition ? errorParam : nil);
             
         }
     }

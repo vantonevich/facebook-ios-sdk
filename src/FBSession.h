@@ -437,11 +437,11 @@ __attribute__((deprecated));
  qualification are deprecated; use of a read-qualified or publish-qualified alternative is preferred
  (e.g. reauthorizeWithReadPermissions or reauthorizeWithPublishPermissions)
  */
-- (void)reauthorizeWithPermissions:(NSArray*)permissions
-                          behavior:(FBSessionLoginBehavior)behavior
-                 completionHandler:(FBSessionReauthorizeResultHandler)handler
- __attribute__((deprecated));
-
+//- (void)reauthorizeWithPermissions:(NSArray*)permissions
+//                          behavior:(FBSessionLoginBehavior)behavior
+//                 completionHandler:(FBSessionReauthorizeResultHandler)handler
+// __attribute__((deprecated));
+//
 /*!
  @abstract
  Reauthorizes the session, with additional permissions.
@@ -454,10 +454,10 @@ __attribute__((deprecated));
  @discussion This method is a deprecated alias of <[FBSession requestNewReadPermissions:completionHandler:]>. Consider
  using <[FBSession requestNewReadPermissions:completionHandler:]>, which is preferred for readability.
  */
-- (void)reauthorizeWithReadPermissions:(NSArray*)readPermissions
-                     completionHandler:(FBSessionReauthorizeResultHandler)handler
-__attribute__((deprecated));
-
+//- (void)reauthorizeWithReadPermissions:(NSArray*)readPermissions
+//                     completionHandler:(FBSessionReauthorizeResultHandler)handler
+//__attribute__((deprecated));
+//
 /*!
  @abstract
  Reauthorizes the session, with additional permissions.
@@ -472,11 +472,11 @@ __attribute__((deprecated));
  @discussion This method is a deprecated alias of <[FBSession requestNewPublishPermissions:defaultAudience:completionHandler:]>.
  Consider using <[FBSession requestNewPublishPermissions:defaultAudience:completionHandler:]>, which is preferred for readability.
  */
-- (void)reauthorizeWithPublishPermissions:(NSArray*)writePermissions
-                          defaultAudience:(FBSessionDefaultAudience)defaultAudience
-                        completionHandler:(FBSessionReauthorizeResultHandler)handler
-__attribute__((deprecated));
-
+//- (void)reauthorizeWithPublishPermissions:(NSArray*)writePermissions
+//                          defaultAudience:(FBSessionDefaultAudience)defaultAudience
+//                        completionHandler:(FBSessionReauthorizeResultHandler)handler
+//__attribute__((deprecated));
+//
 /*!
  @abstract
  Requests new or additional read permissions for the session.
@@ -596,8 +596,7 @@ __attribute__((deprecated));
  */
 + (BOOL)openActiveSessionWithPermissions:(NSArray*)permissions
                             allowLoginUI:(BOOL)allowLoginUI
-                       completionHandler:(FBSessionStateHandler)handler
- __attribute__((deprecated));
+                       completionHandler:(FBSessionStateHandler)handler;
 
 /*!
  @abstract
@@ -704,7 +703,7 @@ __attribute__((deprecated));
 
  @param appID The default Facebook App ID to use for <FBSession> methods.
  */
-+ (void)setDefaultAppID:(NSString*)appID __attribute__((deprecated));
+//+ (void)setDefaultAppID:(NSString*)appID __attribute__((deprecated));
 
 /*!
  @method
@@ -715,7 +714,7 @@ __attribute__((deprecated));
 
  @discussion This method has been deprecated in favor of [FBSettings defaultAppID].
 */
-+ (NSString*)defaultAppID __attribute__((deprecated));
+//+ (NSString*)defaultAppID __attribute__((deprecated));
 
 /*!
  @method
@@ -727,7 +726,7 @@ __attribute__((deprecated));
  
  @param urlSchemeSuffix The default url scheme suffix to use for <FBSession> methods.
  */
-+ (void)setDefaultUrlSchemeSuffix:(NSString*)urlSchemeSuffix __attribute__((deprecated));
+//+ (void)setDefaultUrlSchemeSuffix:(NSString*)urlSchemeSuffix __attribute__((deprecated));
 
 /*!
  @method
@@ -738,7 +737,7 @@ __attribute__((deprecated));
 
  @discussion This method has been deprecated in favor of [FBSettings defaultUrlSchemeSuffix].
  */
-+ (NSString*)defaultUrlSchemeSuffix __attribute__((deprecated));
+//+ (NSString*)defaultUrlSchemeSuffix __attribute__((deprecated));
 
 /*!
  @method
@@ -756,5 +755,5 @@ __attribute__((deprecated));
  This is safe to call (and will surface an error to the handler) on versions of iOS before 6 or if the user
  logged in via Safari or Facebook SSO.
 */
-+ (void)renewSystemCredentials:(FBSessionRenewSystemCredentialsHandler)handler;
+//+ (void)renewSystemCredentials:(FBSessionRenewSystemCredentialsHandler)handler;
 @end

@@ -87,7 +87,7 @@
  @discussion Methods and properties that specify permissions without a read or publish
  qualification are deprecated; use of a read-qualified or publish-qualified alternative is preferred.
  */
-- (id)initWithPermissions:(NSArray *)permissions __attribute__((deprecated));
+//- (id)initWithPermissions:(NSArray *)permissions __attribute__((deprecated));
 
 /*!
  @method

@@ -82,14 +82,14 @@ CGSize g_imageSize;
     return self;
 }
 
-- (id)initWithPermissions:(NSArray *)permissions {
-    self = [super init];
-    if (self) {
-        self.permissions = permissions;
-        [self initialize];
-    }
-    return self;
-}
+//- (id)initWithPermissions:(NSArray *)permissions {
+//    self = [super init];
+//    if (self) {
+//        self.permissions = permissions;
+//        [self initialize];
+//    }
+//    return self;
+//}
 
 - (id)initWithReadPermissions:(NSArray *)readPermissions {
     self = [super init];
