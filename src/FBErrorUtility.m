@@ -239,13 +239,13 @@ static const int FBSDKSystemPasswordErrorSubcode = 65001;
      || [((NSError *)error.userInfo[FBErrorInnerErrorKey]).domain isEqualToString:@"com.apple.accounts"];
 }
 
-+ (void)fberrorGetCodeValueForError:(NSError *)error
++ (void)fberrorGetCodeValueForError:(NSError *)errorParam
                               index:(int)index
                                code:(int *)pcode
                             subcode:(int *)psubcode {
     
     // does this error have a response? that is an array?
-    id response = [error.userInfo objectForKey:FBErrorParsedJSONResponseKey];
+    id response = [errorParam.userInfo objectForKey:FBErrorParsedJSONResponseKey];
     if (response) {
         id item = nil;
         if ([response isKindOfClass:[NSArray class]]) {

@@ -196,8 +196,8 @@
         FBRequest *request = [[FBRequest alloc] initWithSession:self.session
                                                       graphPath:nil];
 
-        FBRequestConnection *connection = [[FBRequestConnection alloc] init];
-        [connection addRequest:request completionHandler:
+        FBRequestConnection *conn = [[FBRequestConnection alloc] init];
+        [conn addRequest:request completionHandler:
          ^(FBRequestConnection *connection, id result, NSError *error) {
              _isResultFromCache = _isResultFromCache || connection.isResultFromCache;
              self.connection = nil;
@@ -207,16 +207,16 @@
         // Override the URL using the one passed back in 'next'.
         NSURL *url = [NSURL URLWithString:self.nextLink];
         NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];
-        connection.urlRequest = urlRequest;
+        conn.urlRequest = urlRequest;
 
         self.nextLink = nil;
         
-        self.connection = connection;
+        self.connection = conn;
         [self.connection startWithCacheIdentity:self.cacheIdentity
                           skipRoundtripIfCached:self.skipRoundtripIfCached];
         
         [request release];
-        [connection release];
+        [conn release];
     }
 }
 
@@ -231,18 +231,18 @@
     self.cacheIdentity = cacheIdentity;
     self.skipRoundtripIfCached = skipRoundtripIfCached;
     
-    FBRequestConnection *connection = [[FBRequestConnection alloc] init];
-    [connection addRequest:request
+    FBRequestConnection *conn = [[FBRequestConnection alloc] init];
+    [conn addRequest:request
          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
              _isResultFromCache = _isResultFromCache || connection.isResultFromCache;
              [self requestCompleted:connection result:result error:error];
          }];
     
-    self.connection = connection;
+    self.connection = conn;
     [self.connection startWithCacheIdentity:self.cacheIdentity
                       skipRoundtripIfCached:self.skipRoundtripIfCached];
 
-    [connection release];
+    [conn release];
 
     NSString *urlString = [[[self.connection urlRequest] URL] absoluteString];
     if ([self.delegate respondsToSelector:@selector(pagingLoader:willLoadURL:)]) {

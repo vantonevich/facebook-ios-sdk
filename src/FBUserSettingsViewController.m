@@ -144,10 +144,10 @@
     
     // If you remove the background images from the resource bundle in order to save space,
     //  this allows the background to still be rendered in Facebook blue.
-    UIColor *facebookBlue = [UIColor colorWithRed:(59.0 / 255.0)
-                                            green:(89.0 / 255.0)
-                                             blue:(152.0 / 255.0)
-                                            alpha:1.0];
+    UIColor *facebookBlue = [UIColor colorWithRed:(59.0f / 255.0f)
+                                            green:(89.0f / 255.0f)
+                                             blue:(152.0f / 255.0f)
+                                            alpha:1.0f];
     self.view.backgroundColor = facebookBlue;
 
     CGRect usableBounds = self.canvasView.bounds;
@@ -211,9 +211,9 @@
                                action:@selector(loginLogoutButtonPressed:)
                      forControlEvents:UIControlEventTouchUpInside];
     self.loginLogoutButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    UIColor *loginTitleColor = [UIColor colorWithRed:75.0 / 255.0
-                                               green:81.0 / 255.0
-                                                blue:100.0 / 255.0
+    UIColor *loginTitleColor = [UIColor colorWithRed:75.0f / 255.0f
+                                               green:81.0f / 255.0f
+                                                blue:100.0f / 255.0f
                                                alpha:1.0];
     [self.loginLogoutButton setTitleColor:loginTitleColor forState:UIControlStateNormal];
     self.loginLogoutButton.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];

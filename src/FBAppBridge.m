@@ -494,14 +494,14 @@ forFailedAppCall:(FBAppCall *)appCall
     }
 }
 
-- (void)trackAppCall:(FBAppCall *)call
+- (void)trackAppCall:(FBAppCall *)callParam
 withCompletionHandler:(FBDialogAppCallCompletionHandler)handler {
-    self.pendingAppCalls[call.ID] = call;
+    self.pendingAppCalls[callParam.ID] = callParam;
     if (!handler) {
         // a noop handler if nil is passed in
         handler = ^(FBAppCall *call, NSDictionary *results, NSError *error) {};
     }
-    self.callbacks[call.ID] = Block_copy(handler);
+    self.callbacks[callParam.ID] = Block_copy(handler);
 }
 
 - (void)stopTrackingCallWithID:(NSString *)callID {

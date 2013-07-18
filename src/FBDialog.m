@@ -22,13 +22,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // global
 
-static CGFloat kBorderGray[4] = {0.3, 0.3, 0.3, 0.8};
-static CGFloat kBorderBlack[4] = {0.3, 0.3, 0.3, 1};
+static CGFloat kBorderGray[4] = {0.3f, 0.3f, 0.3f, 0.8f};
+static CGFloat kBorderBlack[4] = {0.3f, 0.3f, 0.3f, 1.0f};
 
-static CGFloat kTransitionDuration = 0.3;
+static CGFloat kTransitionDuration = 0.3f;
 
-static CGFloat kPadding = 0;
-static CGFloat kBorderWidth = 10;
+static CGFloat kPadding = 0.0f;
+static CGFloat kBorderWidth = 10.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -921,11 +921,11 @@ typedef enum FBRequestConnectionState {
 #pragma mark Graph Object serialization
 
 + (void)processGraphObjectPropertyKey:(NSString*)key 
-                                value:(id)value 
+                                value:(id)newValue
                                action:(KeyValueActionHandler)action 
                           passByValue:(BOOL)passByValue {
-    if ([value conformsToProtocol:@protocol(FBGraphObject)]) {
-        NSDictionary<FBGraphObject> *refObject = (NSDictionary<FBGraphObject>*)value; 
+    if ([newValue conformsToProtocol:@protocol(FBGraphObject)]) {
+        NSDictionary<FBGraphObject> *refObject = (NSDictionary<FBGraphObject>*)newValue;
 
         if (refObject.provisionedForPost) {
             NSString *value = [FBUtility simpleJSONEncode:refObject];
@@ -950,14 +950,14 @@ typedef enum FBRequestConnectionState {
                 action(key, subValue);
             }
         }
-    } else if ([value isKindOfClass:[NSString class]] ||
-               [value isKindOfClass:[NSNumber class]]) {
+    } else if ([newValue isKindOfClass:[NSString class]] ||
+               [newValue isKindOfClass:[NSNumber class]]) {
         // Just serialize these.
-        action(key, value);
-    } else if ([value isKindOfClass:[NSArray class]]) {
+        action(key, newValue);
+    } else if ([newValue isKindOfClass:[NSArray class]]) {
         // Arrays are serialized as multiple elements with keys of the
         // form key[0], key[1], etc.
-        NSArray *array = (NSArray*)value;
+        NSArray *array = (NSArray*)newValue;
         int count = array.count;
         for (int i = 0; i < count; ++i) {
             NSString *subKey = [NSString stringWithFormat:@"%@[%d]", key, i];
@@ -1106,13 +1106,15 @@ typedef enum FBRequestConnectionState {
     } else if ([self.requests count] == 1) {
         // response is the entry, so put it in a dictionary under "body" and add
         // that to array of responses.
-        NSMutableDictionary *result = [[[NSMutableDictionary alloc] init] autorelease];
+        NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
         [result setObject:[NSNumber numberWithInt:statusCode] forKey:@"code"];
-        [result setObject:response forKey:@"body"];
-
+        if (response) {
+            [result setObject:response forKey:@"body"];
+        }
         NSMutableArray *mutableResults = [[[NSMutableArray alloc] init] autorelease];
         [mutableResults addObject:result];
         results = mutableResults;
+        [result release];
     } else if ([response isKindOfClass:[NSArray class]]) {
         // response is the array of responses, but the body element of each needs
         // to be decoded from JSON.
@@ -1250,31 +1252,31 @@ typedef enum FBRequestConnectionState {
 
 }
 - (void)completeWithResults:(NSArray *)results
-                    orError:(NSError *)error
+                    orError:(NSError *)errorParam
 {
     int count = [self.requests count];
     for (int i = 0; i < count; i++) {
         FBRequestMetadata *metadata = [self.requests objectAtIndex:i];
-        id result = error ? nil : [results objectAtIndex:i];
-        NSError *itemError = error ? error : [self errorFromResult:result];
+        id resultOuter = errorParam ? nil : [results objectAtIndex:i];
+        NSError *itemError = errorParam ? errorParam : [self errorFromResult:resultOuter];
         
         // Describes the cleaned up NSError to return back to callbacks.
         NSError *unpackedError = [self unpackIndividualJSONResponseError:itemError];
 
         id body = nil;
-        if (!itemError && [result isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *resultDictionary = (NSDictionary *)result;
+        if (!itemError && [resultOuter isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *resultDictionary = (NSDictionary *)resultOuter;
             body = [FBGraphObject graphObjectWrappingDictionary:[resultDictionary objectForKey:@"body"]];
         }
         
-        int resultIndex = error == itemError ? i : 0;
+        int resultIndex = errorParam == itemError ? i : 0;
         
         // For the renewSystemAuthorization calls below, we want the renew call
         // to finish before executing any further logic. For now, the "further
         // logic" is `[metadata invokeCompletionHandlerForConnection:withResults:error:]` so every code path
         // below should result in its invocation.
         if ((metadata.request.session.accessTokenData.loginType == FBSessionLoginTypeSystemAccount) &&
-            [self isInsufficientPermissionError:error resultIndex:resultIndex]) {
+            [self isInsufficientPermissionError:errorParam resultIndex:resultIndex]) {
             // if we lack permissions, use this as a cue to refresh the
             // OS's understanding of current permissions
             [[FBSystemAccountStoreAdapter sharedInstance]
@@ -1549,13 +1551,14 @@ typedef enum FBRequestConnectionState {
     [sessions release];
 }
 
-+ (void)addRequestToExtendTokenForSession:(FBSession*)session connection:(FBRequestConnection*)connection
++ (void)addRequestToExtendTokenForSession:(FBSession*)session
+                               connection:(FBRequestConnection*)newConnection
 {
     FBRequest *request = [[FBRequest alloc] initWithSession:session
                                                  restMethod:kExtendTokenRestMethod
                                                  parameters:nil
                                                  HTTPMethod:nil];
-    [connection addRequest:request
+    [newConnection addRequest:request
          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
              // extract what we care about
              id token = [result objectForKey:@"access_token"];
