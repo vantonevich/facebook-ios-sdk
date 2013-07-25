@@ -159,9 +159,9 @@
         [[FBAppBridge sharedInstance] dispatchDialogAppCall:call
                                                     version:version
                                                     session:params.session
-                                          completionHandler:^(FBAppCall *call) {
+                                          completionHandler:^(FBAppCall *callInner) {
                                               if (handler) {
-                                                  handler(call, call.dialogData.results, call.error);
+                                                  handler(callInner, callInner.dialogData.results, callInner.error);
                                               }
                                           }];
         return call;
@@ -199,9 +199,9 @@
         [[FBAppBridge sharedInstance] dispatchDialogAppCall:call
                                                     version:version
                                                     session:nil
-                                          completionHandler:^(FBAppCall *call) {
+                                          completionHandler:^(FBAppCall *callInner) {
                                               if (handler) {
-                                                  handler(call, call.dialogData.results, call.error);
+                                                  handler(callInner, callInner.dialogData.results, callInner.error);
                                               }
                                           }];
     }
@@ -288,9 +288,9 @@
             [[FBAppBridge sharedInstance] dispatchDialogAppCall:call
                                                         version:version
                                                         session:nil
-                                              completionHandler:^(FBAppCall *call) {
+                                              completionHandler:^(FBAppCall *callInner) {
                                                   if (handler) {
-                                                      handler(call, call.dialogData.results, call.error);
+                                                      handler(callInner, callInner.dialogData.results, callInner.error);
                                                   }
                                               }];
         }
