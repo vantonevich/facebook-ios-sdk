@@ -100,16 +100,16 @@ typedef enum : NSUInteger {
 + (void)setLoggingBehavior:(NSSet *)loggingBehavior;
 
 /*! @abstract deprecated method */
-+ (BOOL)shouldAutoPublishInstall __attribute__ ((deprecated));
+//+ (BOOL)shouldAutoPublishInstall __attribute__ ((deprecated));
 
 /*! @abstract deprecated method */
-+ (void)setShouldAutoPublishInstall:(BOOL)autoPublishInstall __attribute__ ((deprecated));
+//+ (void)setShouldAutoPublishInstall:(BOOL)autoPublishInstall __attribute__ ((deprecated));
 
 /*! 
  @method
 
  @abstract This method has been replaced by [FBAppEvents activateApp] */
-+ (void)publishInstall:(NSString *)appID __attribute__ ((deprecated("use [FBAppEvents activateApp] instead")));
+//+ (void)publishInstall:(NSString *)appID __attribute__ ((deprecated("use [FBAppEvents activateApp] instead")));
 
 /*!
  @method
@@ -122,8 +122,8 @@ typedef enum : NSUInteger {
  @param appID   A specific appID to publish an install for.  If nil, uses [FBSession defaultAppID].
  @param handler A block to call with the server's response.
  */
-+ (void)publishInstall:(NSString *)appID
-           withHandler:(FBInstallResponseDataHandler)handler __attribute__ ((deprecated));
+//+ (void)publishInstall:(NSString *)appID
+//           withHandler:(FBInstallResponseDataHandler)handler __attribute__ ((deprecated));
 
 
 /*!
