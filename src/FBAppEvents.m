@@ -329,16 +329,16 @@ const int MAX_IDENTIFIER_LENGTH                      = 40;
     [defaults synchronize];
 }
 
-+ (void)activateApp {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    // activateApp supercedes publishInstall in the public API, but we need to
-    // trigger an install event as before.
-    [FBSettings publishInstall:nil];
-#pragma clang diagnostic pop
-  
-    [FBAppEvents logEvent:FBAppEventNameActivatedApp];
-}
+//+ (void)activateApp {
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//    // activateApp supercedes publishInstall in the public API, but we need to
+//    // trigger an install event as before.
+//    [FBSettings publishInstall:nil];
+//#pragma clang diagnostic pop
+//  
+//    [FBAppEvents logEvent:FBAppEventNameActivatedApp];
+//}
 
 #pragma mark - Flushing & Session Management
 

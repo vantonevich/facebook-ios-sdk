@@ -1878,7 +1878,7 @@ static FBSession *g_activeSession = nil;
 
 // helper to wrap-up handler callback and state-change
 - (void)transitionAndCallHandlerWithState:(FBSessionState)status
-                                    error:(NSError*)errorParam
+                                    error:(NSError*)error
                                     token:(NSString*)token
                            expirationDate:(NSDate*)date
                               shouldCache:(BOOL)shouldCache
@@ -1915,10 +1915,10 @@ static FBSession *g_activeSession = nil;
         if (didTransition && FB_ISSESSIONSTATETERMINAL(self.state)) {
             self.loginHandler = nil;
             
-            NSError *error = [self errorLoginFailedWithReason:FBErrorReauthorizeFailedReasonSessionClosed
+            NSError *error2 = [self errorLoginFailedWithReason:FBErrorReauthorizeFailedReasonSessionClosed
                                                     errorCode:nil
                                                    innerError:nil];
-            [self callReauthorizeHandlerAndClearState:error];
+            [self callReauthorizeHandlerAndClearState:error2];
         }
         
         // if we have a handler, call it and release our
@@ -1928,7 +1928,7 @@ static FBSession *g_activeSession = nil;
             // unsuccessful transitions don't change state and don't propagate the error object
             handler(self,
                     self.state,
-                    didTransition ? errorParam : nil);
+                    didTransition ? error : nil);
             
         }
     }

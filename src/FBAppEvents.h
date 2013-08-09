@@ -428,7 +428,7 @@ extern NSString *const FBAppEventParameterValueNo;
  @abstract
  Notifies the events system that the app has launched & logs an activatedApp event.  Should typically be placed in the app delegates' `applicationDidBecomeActive:` method.
  */
-+ (void)activateApp;
+//+ (void)activateApp;
 
 /*
  * Control over event batching/flushing
