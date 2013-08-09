@@ -81,7 +81,6 @@ static NSString *const kAccessTokenKey = @"access_token";
     if (_cacheIndex) {
         _cacheIndex.delegate = nil;
         [_cacheIndex release];
-        _cacheIndex = nil;
     }
     [_dataCachePath release];
     [_inMemoryCache release];
