@@ -44,8 +44,10 @@ static FBSystemAccountStoreAdapter* _singletonInstance = nil;
     self = [super init];
     if (self) {
         _forceBlockingRenew = [[NSUserDefaults standardUserDefaults] boolForKey:FBForceBlockingRenewKey];
-        _accountStore = [[[FBDynamicFrameworkLoader loadClass:@"ACAccountStore" withFramework:@"Accounts"] alloc] init];
-        _accountTypeFB = [[_accountStore accountTypeWithAccountTypeIdentifier:@"com.apple.facebook"] retain];
+        if (&ACAccountTypeIdentifierFacebook && ACAccountTypeIdentifierFacebook) {
+            _accountStore = [[ACAccountStore alloc] init];
+            _accountTypeFB = [[_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook] retain];
+        }
     }
     return self;
 }
@@ -134,19 +136,25 @@ static FBSystemAccountStoreAdapter* _singletonInstance = nil;
         permissionsToUse = [FBUtility addBasicInfoPermission:permissionsToUse];
     }
     
-    NSString *audience;
+    NSString *audience = nil;
     switch (defaultAudience) {
+        case FBSessionDefaultAudienceNone:
+            break;
         case FBSessionDefaultAudienceOnlyMe:
-            audience = [FBDynamicFrameworkLoader loadStringConstant:@"ACFacebookAudienceOnlyMe" withFramework:@"Accounts"];
+            if (&ACFacebookAudienceOnlyMe) {
+                audience = ACFacebookAudienceOnlyMe;
+            }
             break;
         case FBSessionDefaultAudienceFriends:
-            audience = [FBDynamicFrameworkLoader loadStringConstant:@"ACFacebookAudienceFriends" withFramework:@"Accounts"];
+            if (&ACFacebookAudienceFriends) {
+                audience = ACFacebookAudienceFriends;
+            }
             break;
         case FBSessionDefaultAudienceEveryone:
-            audience = [FBDynamicFrameworkLoader loadStringConstant:@"ACFacebookAudienceEveryone" withFramework:@"Accounts"];
+            if (&ACFacebookAudienceEveryone) {
+                audience = ACFacebookAudienceEveryone;
+            }
             break;
-        default:
-            audience = nil;
     }
     
     // no publish_* permissions are permitted with a nil audience
