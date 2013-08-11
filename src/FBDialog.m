@@ -253,6 +253,7 @@ params   = _params;
 }
 
 - (void)postDismissCleanup {
+    [self retain];
     [self removeObservers];
     [self removeFromSuperview];
     [_modalBackgroundView removeFromSuperview];
@@ -263,6 +264,7 @@ params   = _params;
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(showWebView)
                                                object:nil];
+    [self release];
 }
 
 - (void)dismiss:(BOOL)animated {
