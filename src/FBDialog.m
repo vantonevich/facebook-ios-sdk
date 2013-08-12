@@ -598,13 +598,13 @@ params   = _params;
      frictionlessSettings: (FBFrictionlessRequestSettings*) frictionlessSettings
          delegate: (id <FBDialogDelegate>) delegate {
     
-    self = [self init];
-    _serverURL = [serverURL retain];
-    _params = [params retain];    
-    _delegate = delegate;
-    _isViewInvisible = isViewInvisible;
-    _frictionlessSettings = [frictionlessSettings retain];
-    
+    if (self = [self init]) {
+        _serverURL = [serverURL retain];
+        _params = [params retain];
+        _delegate = delegate;
+        _isViewInvisible = isViewInvisible;
+        _frictionlessSettings = [frictionlessSettings retain];
+    }
     return self;
 }
 
