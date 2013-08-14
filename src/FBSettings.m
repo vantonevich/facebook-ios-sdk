@@ -278,12 +278,12 @@ static NSUInteger g_betaFeatures = 0;
         }
 
         // look for a previous ping & grab the facebook app's current attribution id.
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *defaultsOuter = [NSUserDefaults standardUserDefaults];
         NSString *pingKey = [NSString stringWithFormat:FBLastAttributionPing, appID, nil];
         NSString *responseKey = [NSString stringWithFormat:FBLastInstallResponse, appID, nil];
       
-        NSDate *lastPing = [defaults objectForKey:pingKey];
-        id lastResponseData = [defaults objectForKey:responseKey];
+        NSDate *lastPing = [defaultsOuter objectForKey:pingKey];
+        id lastResponseData = [defaultsOuter objectForKey:responseKey];
       
         NSString *attributionID = [FBUtility attributionID];
         NSString *advertiserID = [FBUtility advertiserID];
@@ -314,6 +314,7 @@ static NSUInteger g_betaFeatures = 0;
             @try {
                 if (!error) {
                     // if server communication was successful, take note of the current time.
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     [defaults setObject:[NSDate date] forKey:pingKey];
                     [defaults setObject:result forKey:responseKey];
                     [defaults synchronize];
@@ -355,6 +356,7 @@ static NSUInteger g_betaFeatures = 0;
                         [publishRequest startWithCompletionHandler:publishCompletionBlock];
                     } else {
                         // the app has turned off install insights.  prevent future attempts.
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                         [defaults setObject:[NSDate date] forKey:pingKey];
                         [defaults setObject:nil forKey:responseKey];
                         [defaults synchronize];

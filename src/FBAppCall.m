@@ -387,11 +387,10 @@ NSString *const FBDeferredAppLinkEvent = @"DEFERRED_APP_LINK";
     NSAssert([NSThread isMainThread], @"FBAppCall openDeferredAppLink: must be invoked from main thread.");
 
     NSString *appID = [FBSettings defaultAppID];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *deferredAppLinkKey = [NSString stringWithFormat:FBLastDeferredAppLink, appID, nil];
 
     // prevent multiple occurrences from happening.
-    if ([defaults objectForKey:deferredAppLinkKey]) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:deferredAppLinkKey]) {
         dispatch_async(dispatch_get_main_queue(), ^{
           fallbackHandler(nil);
         });
@@ -422,6 +421,7 @@ NSString *const FBDeferredAppLinkEvent = @"DEFERRED_APP_LINK";
                                                         NSError *error) {
         if (!error) {
             // prevent future network requests.
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setObject:[NSDate date] forKey:deferredAppLinkKey];
             [defaults synchronize];
 
