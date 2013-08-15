@@ -25,7 +25,7 @@ static NSMutableDictionary *g_startTimesWithTags = nil;
 
 @interface FBLogger ()
 
-@property (nonatomic, retain, readonly) NSMutableString *internalContents;
+@property (nonatomic, retain) NSMutableString *internalContents;
 
 @end
 
@@ -39,7 +39,7 @@ static NSMutableDictionary *g_startTimesWithTags = nil;
 // Lifetime
 
 - (id)initWithLoggingBehavior:(NSString *)loggingBehavior {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         _isActive = [[FBSettings loggingBehavior] containsObject:loggingBehavior];
         _loggingBehavior = loggingBehavior;
         if (_isActive) {

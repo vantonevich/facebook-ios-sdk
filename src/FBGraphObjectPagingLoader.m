@@ -52,7 +52,7 @@
 
 - (id)initWithDataSource:(FBGraphObjectTableDataSource*)aDataSource
               pagingMode:(FBGraphObjectPagingMode)pagingMode;{
-    if (self = [super init]) {
+    if ((self = [super init])) {
         // Note that pagingMode must be set before dataSource.
         self.pagingMode = pagingMode;
         self.dataSource = aDataSource;

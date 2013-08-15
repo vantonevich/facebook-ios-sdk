@@ -293,11 +293,11 @@ typedef enum _SelectorInferredImplType {
 }
 
 - (void)setObject:(id)object forKey:(id)key {
-    return [_jsonObject setObject:object forKey:key];    
+    [_jsonObject setObject:object forKey:key];    
 }
 
 - (void)removeObjectForKey:(id)key {
-    return [_jsonObject removeObjectForKey:key];
+    [_jsonObject removeObjectForKey:key];
 }
 
 #pragma mark -

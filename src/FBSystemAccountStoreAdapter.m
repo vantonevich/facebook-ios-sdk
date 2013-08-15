@@ -108,12 +108,12 @@ static FBSystemAccountStoreAdapter* _singletonInstance = nil;
 
 - (void)requestAccessToFacebookAccountStore:(FBSession *)session
                                     handler:(FBRequestAccessToAccountsHandler)handler {
-    return [self requestAccessToFacebookAccountStore:session.accessTokenData.permissions
-                                     defaultAudience:session.lastRequestedSystemAudience
-                                       isReauthorize:NO
-                                               appID:session.appID
-                                             session:session
-                                             handler:handler];
+    [self requestAccessToFacebookAccountStore:session.accessTokenData.permissions
+                              defaultAudience:session.lastRequestedSystemAudience
+                                isReauthorize:NO
+                                        appID:session.appID
+                                      session:session
+                                      handler:handler];
 }
 
 - (void)requestAccessToFacebookAccountStore:(NSArray *)permissions
